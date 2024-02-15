@@ -3,6 +3,7 @@ import { useEffect, useState } from 'react';
 const TodoList = () => {
   const [inputValue, setInputValue] = useState('');
   const [list, setList] = useState([]);
+  const [isLoaded, setIsLoaded] = useState(false);
   const today = new Date();
   const time = `${today.getHours()}${
     today.getMinutes() > 10 ? today.getMinutes() : '0' + today.getMinutes()
@@ -34,6 +35,7 @@ const TodoList = () => {
     const data = { id: time, todo: inputValue, checked: false };
     setList(prev => [...prev, data]);
     setInputValue('');
+    // localStorage.setItem('todo', JSON.stringify(list));
   };
   const week = ['일', '월', '화', '수', '목', '금', '토'];
 
@@ -43,12 +45,14 @@ const TodoList = () => {
     if (localData) {
       setList(localData);
     }
+    setIsLoaded(true);
   }, []);
 
   useEffect(() => {
-    localStorage.setItem('todo', JSON.stringify(list));
-    console.log(list, 'list');
-  }, [list]);
+    if (isLoaded) {
+      localStorage.setItem('todo', JSON.stringify(list));
+    }
+  }, [list, isLoaded]);
   return (
     <div>
       <h1> 📝TodoList</h1>
