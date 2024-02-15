@@ -33,11 +33,22 @@ const TodoList = () => {
     }
     const data = { id: time, todo: inputValue, checked: false };
     setList(prev => [...prev, data]);
-    const localData = localStorage.getItem('todo');
-    console.log(localData);
     setInputValue('');
   };
   const week = ['일', '월', '화', '수', '목', '금', '토'];
+
+  useEffect(() => {
+    const localData = JSON.parse(localStorage.getItem('todo'));
+    console.log(localData, 'load');
+    if (localData) {
+      setList(localData);
+    }
+  }, []);
+
+  useEffect(() => {
+    localStorage.setItem('todo', JSON.stringify(list));
+    console.log(list, 'list');
+  }, [list]);
   return (
     <div>
       <h1> 📝TodoList</h1>
